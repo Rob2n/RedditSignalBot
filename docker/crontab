@@ -1,0 +1,6 @@
+SHELL=/bin/bash
+PATH=/usr/local/openjdk-21/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+JAVA_HOME=/usr/local/openjdk-21
+# Send a message every day at 8h42 am
+40 8 * * * cd /app && find . -type f -iname \*.gif -delete | find . -type f -iname \*.mp4 -delete | find . -type f -iname \*.png -delete | find . -type f -iname \*.jpg -delete | find . -type f -iname \*.jpeg -delete | curl 'https://www.reddit.com/r/cats/hot/.json?limit=8' | jq -r '.data.children[].data.url' | grep '.\(jpe\|jp\|pn\)g\|.gifv\|.gif$' | grep -v 'i.redgifs.com' | sed 's/gifv/mp4/g' | head -n 2 | xargs -n 1 wget && echo -e 'Files in directory:\n'$(ls) > /proc/1/fd/1 2>&1
+42 8 * * * cd /app && bash /app/send_message.sh /app/signal_config/ > /proc/1/fd/1 2>&1
